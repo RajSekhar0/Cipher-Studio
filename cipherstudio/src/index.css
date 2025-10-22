@@ -1,0 +1,186 @@
+/* Theme variables (dark default) */
+:root {
+  --color-bg-primary: #1e1e1e;
+  --color-bg-secondary: #252526;
+  --color-text-primary: #cccccc;
+  --color-text-secondary: #808080;
+  --color-accent: #61dafb;
+  --color-border: #333333;
+  --color-hover: #3a3a3a;
+  --color-active: rgba(97, 218, 251, 0.15);
+}
+
+/* Light mode override */
+body.light {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f9fafb;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-accent: #2563eb;
+  --color-border: #e5e7eb;
+  --color-hover: #f3f4f6;
+  --color-active: #e0e7ff;
+}
+
+/* Base */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial; }
+html, body, #root { height: 100%; background: var(--color-bg-primary); color: var(--color-text-primary); transition: background-color .3s, color .3s; }
+
+/* Layout */
+.app-shell {
+  display: grid;
+  grid-template-columns: 240px 3fr 2fr;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--color-bg-primary);
+}
+
+/* Explorer */
+.explorer {
+  background: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform .3s ease;
+  position: relative;
+  z-index: 10;
+}
+
+/* Editor column */
+.editor-area {
+  background: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.editor-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  flex-shrink: 0;
+}
+
+/* Preview column */
+.preview-area {
+  background: var(--color-bg-primary);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;              /* allow children to grow */
+}
+.preview-area-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  flex: 0 0 auto;
+}
+
+/* Preview body: exactly 70% of column */
+.preview-frame {
+  flex: 0 0 70%;              /* reserve 70% of preview-area height */
+  height: 70%;
+  min-height: 0;
+  border: none;
+  background: var(--color-bg-primary);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure Sandpack wrappers stretch */
+.preview-frame > div {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* UI components */
+.btn {
+  padding: 7px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: all .2s;
+}
+.btn:hover { background: var(--color-hover); }
+.btn.primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg-secondary);
+}
+.btn.primary:hover { opacity: .8; }
+
+.small-input {
+  width: 100%; padding: 8px 10px; border-radius: 4px; outline: none; font-size: 14px;
+  background: var(--color-hover); color: var(--color-text-primary); border: 1px solid var(--color-border);
+}
+.small-input:focus { border-color: var(--color-accent); box-shadow: 0 0 0 2px rgba(97,218,251,.3); }
+
+.file-item {
+  padding: 8px 10px; border-radius: 4px; cursor: pointer; margin-bottom: 4px;
+  display: flex; justify-content: space-between; align-items: center; transition: .2s;
+}
+.file-item:hover { background: var(--color-hover); }
+.file-item.active {
+  background: var(--color-active); border: 1px solid var(--color-accent); color: var(--color-accent);
+}
+
+.footer { font-size: 12px; color: var(--color-text-secondary); text-align: center; padding: 8px 0; border-top: 1px solid var(--color-border); margin-top: 16px; }
+
+.toggle-btn { display: none; }
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .app-shell { grid-template-columns: 3fr 2fr; }
+  .explorer {
+    position: fixed; left: 0; top: 0; width: 280px; z-index: 1100; height: 100%;
+    transform: translateX(-100%); box-shadow: 2px 0 10px rgba(0,0,0,.5);
+  }
+  .explorer.show { transform: translateX(0); }
+  .toggle-btn { display: block; }
+  .footer { display: none; }
+}
+
+/* Mobile: stacked */
+@media (max-width: 700px) {
+  .app-shell { display: flex; flex-direction: column; height: auto; min-height: 100vh; }
+  .editor-area, .preview-area { width: 100%; border-right: none; }
+
+  /* On mobile, use 55/45 split overall, keep preview body at 70% of its column still */
+  .editor-area { height: 55vh; }
+  .preview-area { height: 45vh; border-top: 1px solid var(--color-border); }
+  .preview-frame { flex: 0 0 70%; height: 70%; }
+
+  .toggle-btn {
+    position: fixed; top: 12px; left: 12px; z-index: 1100;
+    background: var(--color-accent); color: var(--color-bg-secondary);
+    padding: 8px 10px; border-radius: 4px; font-size: 1.2em; font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,.3);
+  }
+}
+/* Force the preview column to give real height to its body */
+.preview-area { display: flex; flex-direction: column; min-height: 0; }  /* keep */
+.preview-area-header { flex: 0 0 auto; }                                   /* keep */
+
+/* Make the preview body take exactly 70% and never shrink */
+.preview-frame {
+  flex: 0 0 90%;
+  height: 90%;
+  min-height: 0;
+  overflow: hidden;       /* was auto; scrollbar caused the visible gap */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sandpack sometimes imposes inner max-heights; neutralize them */
+.preview-frame > div,
+.preview-frame > div > div {
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;   /* key fix */
+}
